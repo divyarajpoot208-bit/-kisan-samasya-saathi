@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kisan Samasya Saathi</title>
+<style>
+:root{--green:#236b3b;--light:#eff8ef;--ink:#193321;--muted:#607266;--border:#d8e6da}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;background:#f5f8f4;color:var(--ink);line-height:1.5}
+header{background:var(--green);color:#fff;padding:24px 18px 22px}
+header .leaf{font-size:30px}
+header h1{font-size:25px;margin:5px 0}
+header p{margin:0;color:#e4f3e6}
+main{max-width:760px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #163d1710}
+h2{font-size:19px;margin:0 0 12px}
+label{display:block;font-weight:650;margin:13px 0 6px}
+input,select,textarea{width:100%;font:inherit;padding:12px;border:1px solid #b9cdbd;border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:92px;resize:vertical}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 15px;cursor:pointer}
+.primary{background:var(--green);color:white;width:100%;margin-top:14px}
+.secondary{background:#e8f3e9;color:var(--green)}
+.danger{background:#fff0ee;color:#9b3025}
+.help{color:var(--muted);font-size:13px;margin-top:6px}
+.tip{background:var(--light);border-left:4px solid var(--green);padding:12px;border-radius:8px;margin-top:12px}
+.record{border:1px solid var(--border);padding:12px;border-radius:12px;margin-top:10px}
+.record h3{margin:0 0 5px;font-size:16px}
+.record small{color:var(--muted)}
+.pill{display:inline-block;background:#e8f3e9;color:var(--green);border-radius:30px;padding:3px 9px;font-size:12px;font-weight:700}
+.empty{color:var(--muted);font-size:14px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:4px 20px 25px}
+button:focus,input:focus,select:focus,textarea:focus{outline:3px solid #9bcba6;outline-offset:1px}
+</style>
+</head>
+<body>
+<header>
+  <div class="leaf" aria-hidden="true">🌱</div>
+  <h1>किसान समस्या साथी</h1>
+  <p>किसानों के लिए सरल हिंदी में जानकारी और समस्या का रिकॉर्ड</p>
+</header>
+<main>
+  <section class="card">
+    <h2>🌾 अपनी समस्या दर्ज करें</h2>
+    <form id="problemForm">
+      <label for="farmer">किसान का नाम (वैकल्पिक)</label>
+      <input id="farmer" maxlength="60" placeholder="जैसे: रामलाल">
+      <label for="village">गाँव का नाम</label>
+      <input id="village" maxlength="80" placeholder="अपने गाँव का नाम लिखें" required>
+      <label for="crop">कौन-सी फसल है?</label>
+      <input id="crop" maxlength="60" placeholder="जैसे: गेहूँ, सोयाबीन, चना" required>
+      <label for="category">समस्या किस बारे में है?</label>
+      <select id="category" required>
+        <option value="">समस्या चुनें</option>
+        <option>पत्ते पीले पड़ना / फसल कमजोर होना</option>
+        <option>कीट या बीमारी का शक</option>
+        <option>सिंचाई / पानी की समस्या</option>
+        <option>खाद या मिट्टी की जानकारी</option>
+        <option>मंडी / फसल बेचने की समस्या</option>
+        <option>सरकारी योजना की जानकारी</option>
+        <option>अन्य समस्या</option>
+      </select>
+      <label for="details">समस्या का थोड़ा विवरण</label>
+      <textarea id="details" maxlength="500" placeholder="समस्या कब से है और क्या बदलाव दिख रहा है?" required></textarea>
+      <button class="primary" type="submit">समस्या का रिकॉर्ड सेव करें</button>
+      <p class="help">डेमो में जानकारी इसी ब्राउज़र/डिवाइस में सेव होती है। इसे सरकारी विभाग को नहीं भेजा जाता।</p>
+    </form>
+  </section>
+  <section class="card" id="guidanceCard">
+    <h2>💡 शुरुआती जानकारी</h2>
+    <p id="guidance">ऊपर समस्या चुनें। यहाँ सामान्य शुरुआती जानकारी दिखाई जाएगी।</p>
+    <div class="tip"><strong>जरूरी:</strong> यह ऐप बीमारी की पक्की पहचान या दवा की सलाह नहीं देता। सही उपाय के लिए कृषि विशेषज्ञ या कृषि विज्ञान केंद्र से पुष्टि करें।</div>
+  </section>
+  <section class="card">
+    <h2>📋 सेव किए गए रिकॉर्ड</h2>
+    <p class="help">यह सूची इसी डिवाइस के ब्राउज़र में सेव रिकॉर्ड दिखाती है।</p>
+    <div id="records" aria-live="polite"></div>
+    <button id="clearAll" class="secondary" type="button" style="margin-top:12px">सभी रिकॉर्ड मिटाएँ</button>
+  </section>
+</main>
+<footer>प्रोटोटाइप संस्करण 1.0 · Kisan Samasya Saathi</footer>
+<script>
+const form = document.getElementById('problemForm');
+const category = document.getElementById('category');
+const guidance = document.getElementById('guidance');
+const recordsBox = document.getElementById('records');
+const storageKey = 'kisanSamasyaSaathiRecordsV1';
+
+const guidanceText = {
+  'पत्ते पीले पड़ना / फसल कमजोर होना': 'पत्ते पीले होने के कई कारण हो सकते हैं, जैसे पानी का असंतुलन, पोषक तत्वों की कमी या रोग। फसल, पत्तों की स्थिति और खेत की नमी नोट करें। बिना पुष्टि के खाद या दवा न डालें।',
+  'कीट या बीमारी का शक': 'पत्तों के दोनों तरफ और पौधे के तने को ध्यान से देखें। संभव हो तो साफ तस्वीर लें और फसल का नाम बताकर कृषि विशेषज्ञ या कृषि विज्ञान केंद्र से पहचान की पुष्टि कराएँ।',
+  'सिंचाई / पानी की समस्या': 'खेत की मिट्टी की नमी, पानी रुकने या कमी वाले हिस्से और पिछली सिंचाई की तारीख नोट करें। फसल और मिट्टी के अनुसार सिंचाई की सलाह लें।',
+  'खाद या मिट्टी की जानकारी': 'खाद डालने से पहले मिट्टी की जाँच और फसल की अवस्था के अनुसार सलाह लेना बेहतर है। बिना जानकारी के खाद की मात्रा न बढ़ाएँ।',
+  'मंडी / फसल बेचने की समस्या': 'फसल की मात्रा, गुणवत्ता, परिवहन खर्च और अलग-अलग मंडियों के ताज़ा भाव की तुलना करें। इस डेमो में लाइव मंडी भाव उपलब्ध नहीं हैं।',
+  'सरकारी योजना की जानकारी': 'योजना का नाम और अपनी पात्रता से जुड़े सवाल लिखें। आवेदन या भुगतान की जानकारी केवल आधिकारिक सरकारी पोर्टल या संबंधित कार्यालय से सत्यापित करें।',
+  'अन्य समस्या': 'समस्या का विवरण और तारीख लिखें। यदि फसल को तेजी से नुकसान हो रहा है, तो जल्द कृषि विशेषज्ञ से सलाह लें।'
+};
+
+category.addEventListener('change', () => {
+  guidance.textContent = guidanceText[category.value] || 'ऊपर समस्या चुनें। यहाँ सामान्य शुरुआती जानकारी दिखाई जाएगी।';
+});
+
+function getRecords(){
+  try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); }
+  catch(e) { return []; }
+}
+function renderRecords(){
+  const records = getRecords();
+  recordsBox.innerHTML = '';
+  if (!records.length) {
+    const p = document.createElement('p');
+    p.className = 'empty';
+    p.textContent = 'अभी कोई रिकॉर्ड सेव नहीं है। ऊपर फॉर्म भरकर पहला रिकॉर्ड बनाएँ।';
+    recordsBox.appendChild(p);
+    return;
+  }
+  records.slice().reverse().forEach((r) => {
+    const article = document.createElement('article');
+    article.className = 'record';
+    const h = document.createElement('h3');
+    h.textContent = r.crop + ' — ' + r.category;
+    const meta = document.createElement('small');
+    meta.textContent = r.date + ' · गाँव: ' + r.village + (r.farmer ? ' · किसान: ' + r.farmer : '');
+    const p = document.createElement('p');
+    p.textContent = r.details;
+    article.append(h, meta, p);
+    recordsBox.appendChild(article);
+  });
+}
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const record = {
+    farmer: document.getElementById('farmer').value.trim(),
+    village: document.getElementById('village').value.trim(),
+    crop: document.getElementById('crop').value.trim(),
+    category: category.value,
+    details: document.getElementById('details').value.trim(),
+    date: new Date().toLocaleDateString('hi-IN')
+  };
+  if (!record.village || !record.crop || !record.category || !record.details) {
+    alert('कृपया गाँव, फसल, समस्या और विवरण भरें।');
+    return;
+  }
+  try {
+    const records = getRecords();
+    records.push(record);
+    localStorage.setItem(storageKey, JSON.stringify(records));
+    renderRecords();
+    form.reset();
+    guidance.textContent = 'ऊपर समस्या चुनें। यहाँ सामान्य शुरुआती जानकारी दिखाई जाएगी।';
+    alert('रिकॉर्ड इस डिवाइस के ब्राउज़र में सेव हो गया!');
+  } catch(e) {
+    alert('रिकॉर्ड सेव नहीं हो पाया। कृपया ब्राउज़र की सेटिंग जाँचें या दूसरे ब्राउज़र में खोलें।');
+  }
+});
+document.getElementById('clearAll').addEventListener('click', () => {
+  if (confirm('क्या आप इस डिवाइस के सभी सेव रिकॉर्ड मिटाना चाहते हैं?')) {
+    localStorage.removeItem(storageKey);
+    renderRecords();
+  }
+});
+renderRecords();
+</script>
+</body>
+</html>
